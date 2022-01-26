@@ -11,7 +11,7 @@ const StyledInputElement = styled('input')(
   ({ theme }) => `
   width: 360px;
   font-size: 0.875rem;
-  font-family: IBM Plex Sans, sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-weight: 400;
   line-height: 1.5;
   background: ${theme.palette.common.white};
