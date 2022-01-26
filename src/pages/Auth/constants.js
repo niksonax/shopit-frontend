@@ -1,0 +1,11 @@
+export const STATES = {
+  SIGN_UP: 'SIGN_UP',
+  LOGIN: 'LOGIN',
+};
+
+export const FIELDS = {
+  NAME: 'NAME',
+  EMAIL: 'EMAIL',
+  PASSWORD: 'PASSWORD',
+  PASSWORD_CONFIRM: 'PASSWORD_CONFIRM',
+};

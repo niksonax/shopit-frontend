@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import { Box, AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../routing/routes';
+import { STATES } from '../../pages/Auth/constants';
 
 function Header() {
   return (
@@ -20,10 +21,10 @@ function Header() {
           </LinksContainer>
 
           <AuthButtons>
-            <Link to={ROUTES.AUTH} state={{ page: 'login' }}>
+            <Link to={ROUTES.AUTH} state={{ page: STATES.LOGIN }}>
               <Button variant="outlined">Login</Button>
             </Link>
-            <Link to={ROUTES.AUTH} state={{ page: 'sign-up' }}>
+            <Link to={ROUTES.AUTH} state={{ page: STATES.SIGN_UP }}>
               <Button variant="contained">Sign Up</Button>
             </Link>
           </AuthButtons>
