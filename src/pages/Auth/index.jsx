@@ -13,6 +13,7 @@ import {
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Input } from '../../shared/components';
 import { STATES, FIELDS } from './constants';
+import { validateLoginData, validateSignUpData } from '../../shared/helpers';
 
 function Auth() {
   const location = useLocation();
@@ -25,6 +26,8 @@ function Auth() {
     [FIELDS.PASSWORD_CONFIRM]: '',
     [FIELDS.AGREEMENT]: false,
   });
+  const [loginError, setLoginError] = useState(null);
+  const [signUpError, setSignUpError] = useState(null);
 
   const handleTabChange = (e, newState) => setPageState(newState);
 
@@ -40,10 +43,26 @@ function Auth() {
   };
 
   const handleLoginSubmit = () => {
-    console.log(userData);
+    try {
+      validateLoginData(userData[FIELDS.EMAIL], userData[FIELDS.PASSWORD]);
+      setLoginError(null);
+    } catch (error) {
+      setLoginError(error);
+    }
   };
   const handleSignUpSubmit = () => {
-    console.log(userData);
+    try {
+      validateSignUpData(
+        userData[FIELDS.NAME],
+        userData[FIELDS.EMAIL],
+        userData[FIELDS.PASSWORD],
+        userData[FIELDS.PASSWORD_CONFIRM],
+        userData[FIELDS.AGREEMENT]
+      );
+      setSignUpError(null);
+    } catch (error) {
+      setSignUpError(error);
+    }
   };
 
   useEffect(() => {
@@ -77,6 +96,8 @@ function Auth() {
               value={userData[FIELDS.PASSWORD]}
               onChange={handleInputChange}
             />
+
+            {loginError && <InputLabel error>{loginError.message}</InputLabel>}
 
             <Button variant="contained" onClick={handleLoginSubmit}>
               Login
@@ -133,6 +154,10 @@ function Auth() {
               </Typography>
             </AgreementContainer>
 
+            {signUpError && (
+              <InputLabel error>{signUpError.message}</InputLabel>
+            )}
+
             <Button variant="contained" onClick={handleSignUpSubmit}>
               Sign Up
             </Button>
@@ -161,6 +186,7 @@ const AuthForm = styled(Container)(({ theme }) => ({
     margin: '0 0 5px 2.3rem',
     fontWeight: 700,
   },
+  '& label .Mui-error': {},
   '& .MuiButton-root': {
     margin: '2rem auto',
     borderRadius: '8px',
@@ -173,6 +199,7 @@ const AgreementContainer = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'flex-start',
   padding: '0 2.3rem',
+  marginBottom: '1.5rem',
   '& .MuiTypography-root': {
     fontSize: '14px',
     paddingTop: '0.5rem',
