@@ -15,10 +15,10 @@ function validateEmail(email) {
 }
 
 function validatePassword(password) {
-  if (password.length >= 6) {
+  if (password.length >= 5) {
     return true;
   } else {
-    throw new Error('Password should be at least 6 characters long');
+    throw new Error('Password should be at least 5 characters long');
   }
 }
 

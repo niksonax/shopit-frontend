@@ -14,9 +14,13 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Input } from '../../shared/components';
 import { STATES, FIELDS } from './constants';
 import { validateLoginData, validateSignUpData } from '../../shared/helpers';
+import { useLoginMutation, useRegisterMutation } from '../../shared/api/auth';
 
 function Auth() {
   const location = useLocation();
+
+  const [login, loginStatus] = useLoginMutation();
+  const [register, registerStatus] = useRegisterMutation();
 
   const [pageState, setPageState] = useState(STATES.LOGIN);
   const [userData, setUserData] = useState({
@@ -42,15 +46,20 @@ function Auth() {
     setUserData({ ...userData, [field]: checked });
   };
 
-  const handleLoginSubmit = () => {
+  const handleLoginSubmit = async () => {
     try {
       validateLoginData(userData[FIELDS.EMAIL], userData[FIELDS.PASSWORD]);
       setLoginError(null);
+
+      await login({
+        email: userData[FIELDS.EMAIL],
+        password: userData[FIELDS.PASSWORD],
+      });
     } catch (error) {
       setLoginError(error);
     }
   };
-  const handleSignUpSubmit = () => {
+  const handleSignUpSubmit = async () => {
     try {
       validateSignUpData(
         userData[FIELDS.NAME],
@@ -60,6 +69,15 @@ function Auth() {
         userData[FIELDS.AGREEMENT]
       );
       setSignUpError(null);
+
+      // todo: catch user with this email already exists problem
+      await register({
+        name: userData[FIELDS.NAME],
+        email: userData[FIELDS.EMAIL],
+        password: userData[FIELDS.PASSWORD],
+      });
+
+      // show user that he has registered successfully and redirect him on login/main page
     } catch (error) {
       setSignUpError(error);
     }
