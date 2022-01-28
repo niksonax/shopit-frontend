@@ -1,16 +1,31 @@
 import React from 'react';
-import { styled } from '@mui/system';
-import { Box, AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { styled } from '@mui/system';
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Avatar,
+} from '@mui/material';
+import { useAuth } from '../../shared/hooks';
+import { selectCurrentUser } from '../../shared/reducers/user';
 import { ROUTES } from '../../routing/routes';
 import { STATES } from '../../pages/Auth/constants';
 
 function Header() {
+  const isAuthenticated = useAuth();
+  const { name } = useSelector(selectCurrentUser);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <HeaderContainer position="static">
         <Toolbar>
-          <Logo>ShopIt</Logo>
+          <Logo>
+            <Link to={ROUTES.HOME}>ShopIt</Link>
+          </Logo>
 
           <LinksContainer>
             <Link to={ROUTES.HOME}>
@@ -22,14 +37,23 @@ function Header() {
             <Typography>About</Typography>
           </LinksContainer>
 
-          <AuthButtons>
-            <Link to={ROUTES.AUTH} state={{ page: STATES.LOGIN }}>
-              <Button variant="outlined">Login</Button>
-            </Link>
-            <Link to={ROUTES.AUTH} state={{ page: STATES.SIGN_UP }}>
-              <Button variant="contained">Sign Up</Button>
-            </Link>
-          </AuthButtons>
+          {isAuthenticated ? (
+            <UserMenu>
+              <Typography>
+                Hi, <Typography variant="span">{name}</Typography>
+              </Typography>
+              <Avatar>{name[0]}</Avatar>
+            </UserMenu>
+          ) : (
+            <AuthButtons>
+              <Link to={ROUTES.AUTH} state={{ page: STATES.LOGIN }}>
+                <Button variant="outlined">Login</Button>
+              </Link>
+              <Link to={ROUTES.AUTH} state={{ page: STATES.SIGN_UP }}>
+                <Button variant="contained">Sign Up</Button>
+              </Link>
+            </AuthButtons>
+          )}
         </Toolbar>
       </HeaderContainer>
     </Box>
@@ -44,10 +68,11 @@ const HeaderContainer = styled(AppBar)(({ theme }) => ({
   padding: '0 6rem',
   '& a': {
     textDecoration: 'none',
+    color: theme.palette.primary.main,
   },
 }));
 
-const Logo = styled(Typography)(() => ({
+const Logo = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   fontSize: '30px',
   marginRight: '8rem',
@@ -64,6 +89,19 @@ const LinksContainer = styled(Box)(({ theme }) => ({
       color: theme.palette.primary.main,
       cursor: 'pointer',
     },
+  },
+}));
+
+const UserMenu = styled(Box)(() => ({
+  display: 'flex',
+  marginLeft: 'auto',
+  alignItems: 'center',
+  '& .MuiTypography-root': {
+    fontSize: '18px',
+    marginRight: '0.5rem',
+  },
+  '& .MuiTypography-span': {
+    fontWeight: 700,
   },
 }));
 
