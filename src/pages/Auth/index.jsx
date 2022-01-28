@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/system';
 import {
   Container,
@@ -12,12 +12,15 @@ import {
 } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Input } from '../../shared/components';
+import { ThanksForRegistration } from './ThanksForRegistration';
 import { STATES, FIELDS } from './constants';
 import { validateLoginData, validateSignUpData } from '../../shared/helpers';
 import { useLoginMutation, useRegisterMutation } from '../../shared/api/auth';
+import { ROUTES } from '../../routing/routes';
 
 function Auth() {
   const location = useLocation();
+  const navigation = useNavigate();
 
   const [login, loginStatus] = useLoginMutation();
   const [register, registerStatus] = useRegisterMutation();
@@ -32,6 +35,7 @@ function Auth() {
   });
   const [loginError, setLoginError] = useState(null);
   const [signUpError, setSignUpError] = useState(null);
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   const handleTabChange = (e, newState) => setPageState(newState);
 
@@ -59,6 +63,8 @@ function Auth() {
       if (error) {
         throw new Error(error.data.error);
       }
+
+      navigation(ROUTES.HOME);
     } catch (error) {
       setLoginError(error);
     }
@@ -84,7 +90,7 @@ function Auth() {
         throw new Error(error.data.error);
       }
 
-      // show user that he has registered successfully and redirect him on login/main page
+      setSignUpSuccess(true);
     } catch (error) {
       setSignUpError(error);
     }
@@ -98,97 +104,103 @@ function Auth() {
 
   return (
     <AuthContainer>
-      <TabContext value={pageState}>
-        <TabList onChange={handleTabChange} centered>
-          <Tab label="Login" value={STATES.LOGIN} />
-          <Tab label="Sign Up" value={STATES.SIGN_UP} />
-        </TabList>
+      {signUpSuccess ? (
+        <ThanksForRegistration />
+      ) : (
+        <TabContext value={pageState}>
+          <TabList onChange={handleTabChange} centered>
+            <Tab label="Login" value={STATES.LOGIN} />
+            <Tab label="Sign Up" value={STATES.SIGN_UP} />
+          </TabList>
 
-        <TabPanel value={STATES.LOGIN}>
-          <AuthForm>
-            <InputLabel>Email</InputLabel>
-            <Input
-              id={FIELDS.EMAIL}
-              placeholder="example@mail.com"
-              value={userData[FIELDS.EMAIL]}
-              onChange={handleInputChange}
-            />
-
-            <InputLabel>Password</InputLabel>
-            <Input
-              id={FIELDS.PASSWORD}
-              type="password"
-              value={userData[FIELDS.PASSWORD]}
-              onChange={handleInputChange}
-            />
-
-            {loginError && <InputLabel error>{loginError.message}</InputLabel>}
-
-            <Button variant="contained" onClick={handleLoginSubmit}>
-              Login
-            </Button>
-          </AuthForm>
-        </TabPanel>
-
-        <TabPanel value={STATES.SIGN_UP}>
-          <AuthForm>
-            <InputLabel>Name</InputLabel>
-            <Input
-              id={FIELDS.NAME}
-              placeholder="Your Name"
-              value={userData[FIELDS.NAME]}
-              onChange={handleInputChange}
-            />
-
-            <InputLabel>Email</InputLabel>
-            <Input
-              id={FIELDS.EMAIL}
-              placeholder="example@mail.com"
-              value={userData[FIELDS.EMAIL]}
-              onChange={handleInputChange}
-            />
-
-            <InputLabel>Password</InputLabel>
-            <Input
-              id={FIELDS.PASSWORD}
-              type="password"
-              value={userData[FIELDS.PASSWORD]}
-              onChange={handleInputChange}
-            />
-
-            <InputLabel>Confirm password</InputLabel>
-            <Input
-              id={FIELDS.PASSWORD_CONFIRM}
-              type="password"
-              value={userData[FIELDS.PASSWORD_CONFIRM]}
-              onChange={handleInputChange}
-            />
-
-            <AgreementContainer>
-              <Checkbox
-                id={FIELDS.AGREEMENT}
-                checked={userData[FIELDS.AGREEMENT]}
-                onChange={handleCheckboxChange}
+          <TabPanel value={STATES.LOGIN}>
+            <AuthForm>
+              <InputLabel>Email</InputLabel>
+              <Input
+                id={FIELDS.EMAIL}
+                placeholder="example@mail.com"
+                value={userData[FIELDS.EMAIL]}
+                onChange={handleInputChange}
               />
-              <Typography>
-                By creating an account you agree to the terms and conditions
-                applicable to our service and acknowledge that your personal
-                data will be used in accordance with our privacy policy and you
-                will receive emails and communications about jobs, industry
-                news, new products and related topics.
-              </Typography>
-            </AgreementContainer>
 
-            {signUpError && (
-              <InputLabel error>{signUpError.message}</InputLabel>
-            )}
+              <InputLabel>Password</InputLabel>
+              <Input
+                id={FIELDS.PASSWORD}
+                type="password"
+                value={userData[FIELDS.PASSWORD]}
+                onChange={handleInputChange}
+              />
 
-            <Button variant="contained" onClick={handleSignUpSubmit}>
-              Sign Up
-            </Button>
-          </AuthForm>
-        </TabPanel>
-      </TabContext>
+              {loginError && (
+                <InputLabel error>{loginError.message}</InputLabel>
+              )}
+
+              <Button variant="contained" onClick={handleLoginSubmit}>
+                Login
+              </Button>
+            </AuthForm>
+          </TabPanel>
+
+          <TabPanel value={STATES.SIGN_UP}>
+            <AuthForm>
+              <InputLabel>Name</InputLabel>
+              <Input
+                id={FIELDS.NAME}
+                placeholder="Your Name"
+                value={userData[FIELDS.NAME]}
+                onChange={handleInputChange}
+              />
+
+              <InputLabel>Email</InputLabel>
+              <Input
+                id={FIELDS.EMAIL}
+                placeholder="example@mail.com"
+                value={userData[FIELDS.EMAIL]}
+                onChange={handleInputChange}
+              />
+
+              <InputLabel>Password</InputLabel>
+              <Input
+                id={FIELDS.PASSWORD}
+                type="password"
+                value={userData[FIELDS.PASSWORD]}
+                onChange={handleInputChange}
+              />
+
+              <InputLabel>Confirm password</InputLabel>
+              <Input
+                id={FIELDS.PASSWORD_CONFIRM}
+                type="password"
+                value={userData[FIELDS.PASSWORD_CONFIRM]}
+                onChange={handleInputChange}
+              />
+
+              <AgreementContainer>
+                <Checkbox
+                  id={FIELDS.AGREEMENT}
+                  checked={userData[FIELDS.AGREEMENT]}
+                  onChange={handleCheckboxChange}
+                />
+                <Typography>
+                  By creating an account you agree to the terms and conditions
+                  applicable to our service and acknowledge that your personal
+                  data will be used in accordance with our privacy policy and
+                  you will receive emails and communications about jobs,
+                  industry news, new products and related topics.
+                </Typography>
+              </AgreementContainer>
+
+              {signUpError && (
+                <InputLabel error>{signUpError.message}</InputLabel>
+              )}
+
+              <Button variant="contained" onClick={handleSignUpSubmit}>
+                Sign Up
+              </Button>
+            </AuthForm>
+          </TabPanel>
+        </TabContext>
+      )}
     </AuthContainer>
   );
 }
