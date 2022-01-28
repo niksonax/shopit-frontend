@@ -15,6 +15,9 @@ const mainTheme = createTheme({
   typography: {
     fontFamily: "'Manrope', sans-serif",
   },
+  shape: {
+    borderRadius: '8px',
+  },
 });
 
 export default mainTheme;
