@@ -26,5 +26,5 @@ export const { setCredentials, setAuthenticated } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
 
-export const selectCurrentUser = (state) => state.user;
-export const isUserAuthenticated = (state) => state.user.isAuthenticated;
+export const selectCurrentUser = (state) => state.userReducer;
+export const isUserAuthenticated = (state) => state.userReducer.isAuthenticated;

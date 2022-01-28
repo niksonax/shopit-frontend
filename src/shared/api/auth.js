@@ -23,7 +23,7 @@ export const authApi = createApi({
           const { name, email } = await data.user;
 
           dispatch(setCredentials({ name, email }));
-          dispatch(setAuthenticated(true));
+          dispatch(setAuthenticated({ isAuthenticated: true }));
         } catch (error) {}
       },
     }),
@@ -34,20 +34,6 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
-    /* login: builder.query({
-      query: (credentials) => ({
-        url: 'auth/login',
-        method: 'POST',
-        body: credentials,
-      }),
-    }),
-    register: builder.query({
-      query: (credentials) => ({
-        url: 'users',
-        method: 'POST',
-        body: credentials,
-      }),
-    }), */
   }),
 });
 
