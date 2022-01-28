@@ -16,7 +16,9 @@ function Header() {
             <Link to={ROUTES.HOME}>
               <Typography>Home</Typography>
             </Link>
-            <Typography>Catalog</Typography>
+            <Link to={ROUTES.CATALOG}>
+              <Typography>Catalog</Typography>
+            </Link>
             <Typography>About</Typography>
           </LinksContainer>
 
