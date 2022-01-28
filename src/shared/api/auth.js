@@ -29,24 +29,10 @@ export const authApi = createApi({
     }),
     register: builder.mutation({
       query: (credentials) => ({
-        url: 'users/',
+        url: 'auth/register',
         method: 'POST',
         body: credentials,
       }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          const { accessToken, refreshToken } = await data.tokens;
-
-          window.localStorage.setItem('accessToken', accessToken);
-          window.localStorage.setItem('refreshToken', refreshToken);
-
-          const { name, email } = await data.user;
-
-          dispatch(setCredentials({ name, email }));
-          dispatch(setAuthenticated(true));
-        } catch (error) {}
-      },
     }),
     /* login: builder.query({
       query: (credentials) => ({
