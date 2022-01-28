@@ -51,10 +51,14 @@ function Auth() {
       validateLoginData(userData[FIELDS.EMAIL], userData[FIELDS.PASSWORD]);
       setLoginError(null);
 
-      await login({
+      const { error } = await login({
         email: userData[FIELDS.EMAIL],
         password: userData[FIELDS.PASSWORD],
       });
+
+      if (error) {
+        throw new Error(error.data.error);
+      }
     } catch (error) {
       setLoginError(error);
     }
@@ -70,12 +74,15 @@ function Auth() {
       );
       setSignUpError(null);
 
-      // todo: catch user with this email already exists problem
-      await register({
+      const { error } = await register({
         name: userData[FIELDS.NAME],
         email: userData[FIELDS.EMAIL],
         password: userData[FIELDS.PASSWORD],
       });
+
+      if (error) {
+        throw new Error(error.data.error);
+      }
 
       // show user that he has registered successfully and redirect him on login/main page
     } catch (error) {
