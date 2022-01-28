@@ -4,10 +4,10 @@ import { ROUTES } from './routes';
 import { STATES as AUTH_STATES } from '../pages/Auth/constants';
 
 export function RequireAuth({ children }) {
-  const auth = useAuth();
+  const isAuthenticated = useAuth();
   const location = useLocation();
 
-  if (!auth) {
+  if (!isAuthenticated) {
     // Save current location to redirect user there after login
     return (
       <Navigate
