@@ -1,23 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/system';
-import {
-  Box,
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Avatar,
-} from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { useAuth } from '../../shared/hooks';
-import { selectCurrentUser } from '../../shared/reducers/user';
+import { AccountMenu } from '..';
 import { ROUTES } from '../../routing/routes';
 import { STATES } from '../../pages/Auth/constants';
 
 function Header() {
   const isAuthenticated = useAuth();
-  const { name } = useSelector(selectCurrentUser);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -38,12 +29,7 @@ function Header() {
           </LinksContainer>
 
           {isAuthenticated ? (
-            <UserMenu>
-              <Typography>
-                Hi, <Typography variant="span">{name}</Typography>
-              </Typography>
-              <Avatar>{name[0]}</Avatar>
-            </UserMenu>
+            <AccountMenu />
           ) : (
             <AuthButtons>
               <Link to={ROUTES.AUTH} state={{ page: STATES.LOGIN }}>
@@ -89,19 +75,6 @@ const LinksContainer = styled(Box)(({ theme }) => ({
       color: theme.palette.primary.main,
       cursor: 'pointer',
     },
-  },
-}));
-
-const UserMenu = styled(Box)(() => ({
-  display: 'flex',
-  marginLeft: 'auto',
-  alignItems: 'center',
-  '& .MuiTypography-root': {
-    fontSize: '18px',
-    marginRight: '0.5rem',
-  },
-  '& .MuiTypography-span': {
-    fontWeight: 700,
   },
 }));
 
