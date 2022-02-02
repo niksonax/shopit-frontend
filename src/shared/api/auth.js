@@ -24,7 +24,26 @@ export const authApi = createApi({
 
           dispatch(setCredentials({ name, email }));
           dispatch(setAuthenticated({ isAuthenticated: true }));
-        } catch (error) {}
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    }),
+    logout: builder.mutation({
+      query: () => ({
+        url: 'auth/refresh-token',
+        method: 'DELETE',
+      }),
+      async onQueryStarted(_, { dispatch }) {
+        try {
+          window.localStorage.setItem('accessToken', null);
+          window.localStorage.setItem('refreshToken', null);
+
+          dispatch(setCredentials({ name: null, email: null }));
+          dispatch(setAuthenticated({ isAuthenticated: false }));
+        } catch (error) {
+          console.error(error);
+        }
       },
     }),
     register: builder.mutation({
@@ -37,4 +56,5 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =
+  authApi;

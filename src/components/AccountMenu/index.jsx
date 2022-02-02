@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Menu,
@@ -13,9 +14,13 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { Person, Store, ShoppingCart, Logout } from '@mui/icons-material';
+import { useLogoutMutation } from '../../shared/api/auth';
 import { selectCurrentUser } from '../../shared/reducers/user';
+import { ROUTES } from '../../routing/routes';
 
 function AccountMenu() {
+  const navigation = useNavigate();
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const isOpen = Boolean(anchorEl);
@@ -24,6 +29,13 @@ function AccountMenu() {
   const handleClose = () => setAnchorEl(null);
 
   const { name } = useSelector(selectCurrentUser);
+
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    await logout();
+    navigation(ROUTES.HOME);
+  };
 
   return (
     <React.Fragment>
@@ -72,7 +84,7 @@ function AccountMenu() {
           My Purchases
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" color="error" />
           </ListItemIcon>
