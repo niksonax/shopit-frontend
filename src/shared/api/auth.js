@@ -1,10 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from '.';
+import { baseQueryWithReauth } from '.';
 import { setCredentials, setAuthenticated } from '../reducers/user';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery,
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -21,6 +21,23 @@ export const authApi = createApi({
           window.localStorage.setItem('refreshToken', refreshToken);
 
           const { name, email } = await data.user;
+
+          dispatch(setCredentials({ name, email }));
+          dispatch(setAuthenticated({ isAuthenticated: true }));
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    }),
+    loginByToken: builder.mutation({
+      query: () => ({
+        url: 'auth/login-by-token',
+        method: 'POST',
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          const { name, email } = await data;
 
           dispatch(setCredentials({ name, email }));
           dispatch(setAuthenticated({ isAuthenticated: true }));
@@ -56,5 +73,9 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useLoginByTokenMutation,
+  useLogoutMutation,
+  useRegisterMutation,
+} = authApi;
