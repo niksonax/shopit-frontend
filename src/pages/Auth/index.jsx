@@ -211,6 +211,10 @@ const AuthContainer = styled(Container)(({ theme }) => ({
   padding: '1rem 0',
   borderRadius: '8px',
   backgroundColor: theme.palette.background.default,
+  '& .MuiTab-root': {
+    fontWeight: 600,
+    fontSize: '16px',
+  },
 }));
 
 const AuthForm = styled(Container)(({ theme }) => ({
