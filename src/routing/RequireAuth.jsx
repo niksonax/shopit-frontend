@@ -16,7 +16,7 @@ export function RequireAuth({ children }) {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      if (accessToken) {
+      if (accessToken !== 'null') {
         loginByToken();
       } else {
         navigate(ROUTES.AUTH, {
