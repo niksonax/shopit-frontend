@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { styled } from '@mui/system';
 import { Box, AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { useAuth } from '../../shared/hooks';
@@ -19,13 +19,15 @@ function Header() {
           </Logo>
 
           <LinksContainer>
-            <Link to={ROUTES.HOME}>
+            <NavLink to={ROUTES.HOME}>
               <Typography>Home</Typography>
-            </Link>
-            <Link to={ROUTES.CATALOG}>
+            </NavLink>
+            <NavLink to={ROUTES.CATALOG}>
               <Typography>Catalog</Typography>
-            </Link>
-            <Typography>About</Typography>
+            </NavLink>
+            <NavLink to={ROUTES.ABOUT}>
+              <Typography>About</Typography>
+            </NavLink>
           </LinksContainer>
 
           {isAuthenticated ? (
@@ -70,10 +72,15 @@ const LinksContainer = styled(Box)(({ theme }) => ({
     margin: '0 2rem',
     fontWeight: 600,
     fontSize: '18px',
-    color: theme.palette.common.grey,
     '&:hover': {
       color: theme.palette.primary.main,
       cursor: 'pointer',
+    },
+  },
+  '& a': {
+    color: theme.palette.common.grey,
+    '&.active': {
+      color: theme.palette.primary.main,
     },
   },
 }));
@@ -84,14 +91,6 @@ const AuthButtons = styled(Box)(({ theme }) => ({
     marginLeft: '1rem',
     borderRadius: '8px',
     fontWeight: 600,
-  },
-  '& .MuiButton-contained': {
-    color: 'white',
-    backgroundColor: theme.palette.primary.main,
-  },
-  '& .MuiButton-outlined': {
-    color: theme.palette.primary.main,
-    borderColor: theme.palette.primary.main,
   },
 }));
 
