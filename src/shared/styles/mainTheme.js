@@ -14,9 +14,27 @@ const mainTheme = createTheme({
   },
   typography: {
     fontFamily: "'Manrope', sans-serif",
+    h6: {
+      fontWeight: 600,
+    },
+    h5: {
+      fontWeight: 600,
+    },
   },
   shape: {
     borderRadius: '8px',
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontWeight: 600,
+        },
+        outlined: {
+          borderColor: '#2E1AAD',
+        },
+      },
+    },
   },
 });
 
