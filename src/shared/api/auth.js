@@ -20,9 +20,9 @@ export const authApi = createApi({
           window.localStorage.setItem('accessToken', accessToken);
           window.localStorage.setItem('refreshToken', refreshToken);
 
-          const { name, email } = await data.user;
+          const { id, name, email } = await data.user;
 
-          dispatch(setCredentials({ name, email }));
+          dispatch(setCredentials({ id, name, email }));
           dispatch(setAuthenticated({ isAuthenticated: true }));
         } catch (error) {
           console.error(error);
@@ -37,9 +37,9 @@ export const authApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          const { name, email } = await data;
+          const { id, name, email } = await data;
 
-          dispatch(setCredentials({ name, email }));
+          dispatch(setCredentials({ id, name, email }));
           dispatch(setAuthenticated({ isAuthenticated: true }));
         } catch (error) {
           console.error(error);
@@ -56,7 +56,7 @@ export const authApi = createApi({
           window.localStorage.setItem('accessToken', null);
           window.localStorage.setItem('refreshToken', null);
 
-          dispatch(setCredentials({ name: null, email: null }));
+          dispatch(setCredentials({ id: null, name: null, email: null }));
           dispatch(setAuthenticated({ isAuthenticated: false }));
         } catch (error) {
           console.error(error);
