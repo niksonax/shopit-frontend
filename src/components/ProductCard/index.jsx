@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../shared/reducers/user';
 import { useCreatePurchaseMutation } from '../../shared/api/purchases';
-import { Paper, Typography, Button } from '@mui/material';
+import { Box, Paper, Typography, Button } from '@mui/material';
 import { LocalMall } from '@mui/icons-material';
 import { styled } from '@mui/system';
 
-function ProductCard({ id, name, price, description, handleSnackbarOpen }) {
+function ProductCard({
+  id,
+  name,
+  price,
+  description: fullDescription,
+  handleSnackbarOpen,
+}) {
   const { id: userId } = useSelector(selectCurrentUser);
 
   const [isHovered, setIsHovered] = useState(false);
+  const [description, setDescription] = useState(fullDescription);
 
   const [createPurchase] = useCreatePurchaseMutation();
 
@@ -28,6 +35,12 @@ function ProductCard({ id, name, price, description, handleSnackbarOpen }) {
     }
   };
 
+  useEffect(() => {
+    if (description.length > 165) {
+      setDescription(`${description.slice(0, 164)}...`);
+    }
+  }, [description]);
+
   return (
     <Card
       elevation={isHovered ? 4 : 1}
@@ -39,10 +52,12 @@ function ProductCard({ id, name, price, description, handleSnackbarOpen }) {
         ${price}
       </Typography>
       <Typography color="text.secondary">{description}</Typography>
-      <Button variant="outlined" onClick={createPurchaseHandler}>
-        <LocalMall sx={{ mr: 1 }} />
-        Buy
-      </Button>
+      <Box>
+        <Button variant="outlined" onClick={createPurchaseHandler}>
+          <LocalMall sx={{ mr: 1 }} />
+          Buy
+        </Button>
+      </Box>
     </Card>
   );
 }
@@ -51,11 +66,19 @@ const Card = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   padding: '1.5rem 2rem',
   width: '240px',
+  height: '300px',
+  display: 'flex',
+  flexDirection: 'column',
   '&>.MuiTypography-root': {
     marginBottom: '1rem',
   },
   '& .MuiButton-root': {
     fontSize: '1rem',
+  },
+  '& .MuiBox-root': {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 'auto',
   },
 }));
 
