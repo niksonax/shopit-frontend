@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Menu,
@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { styled } from '@mui/system';
-import { Person, Store, ShoppingCart, Logout } from '@mui/icons-material';
+import { Person, Logout } from '@mui/icons-material';
 import { useLogoutMutation } from '../../shared/api/auth';
 import { selectCurrentUser } from '../../shared/reducers/user';
 import { ROUTES } from '../../routing/routes';
@@ -28,7 +28,7 @@ function AccountMenu() {
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
-  const { name } = useSelector(selectCurrentUser);
+  const { name, email } = useSelector(selectCurrentUser);
 
   const [logout] = useLogoutMutation();
 
@@ -65,25 +65,19 @@ function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <ListItemIcon>
-            <Person fontSize="small" />
-          </ListItemIcon>
-          My Account
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <Store fontSize="small" />
-          </ListItemIcon>
-          My Products
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <ShoppingCart fontSize="small" />
-          </ListItemIcon>
-          My Purchases
+        <MenuItem sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+          <Typography fontWeight={600}>{name}</Typography>
+          <Typography>{email}</Typography>
         </MenuItem>
         <Divider />
+        <MenuItem>
+          <Link to={ROUTES.PROFILE}>
+            <ListItemIcon>
+              <Person fontSize="small" />
+            </ListItemIcon>
+            Account
+          </Link>
+        </MenuItem>
         <MenuItem sx={{ color: 'error.main' }} onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" color="error" />
@@ -115,10 +109,11 @@ const MenuBox = styled(Box)(() => ({
   },
 }));
 
-const DropdownContainer = styled(Menu)(() => ({
+const DropdownContainer = styled(Menu)(({ theme }) => ({
   '& .MuiMenu-paper': {
     overflow: 'visible',
     filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+    width: '200px',
     mt: 1.5,
     '&:before': {
       content: '""',
@@ -131,6 +126,12 @@ const DropdownContainer = styled(Menu)(() => ({
       bgcolor: 'background.paper',
       transform: 'translateY(-50%) rotate(45deg)',
       zIndex: 0,
+    },
+    '& a': {
+      textDecoration: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      color: theme.palette.common.black,
     },
   },
 }));
