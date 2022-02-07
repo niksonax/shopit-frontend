@@ -9,6 +9,7 @@ import {
   tabUnstyledClasses,
 } from '@mui/base';
 import { CircularProgress } from '@mui/material';
+import { Store, ShoppingCart, Settings } from '@mui/icons-material';
 import { useGetUserPurchasesQuery } from '../../shared/api/purchases';
 import UserPurchases from './UserPurchases';
 
@@ -27,9 +28,18 @@ function UserDashboard({ userId }) {
   return (
     <TabsUnstyled defaultValue={0}>
       <TabsList>
-        <Tab>Purchases</Tab>
-        <Tab>Products</Tab>
-        <Tab>Other</Tab>
+        <Tab>
+          <ShoppingCart />
+          Purchases
+        </Tab>
+        <Tab>
+          <Store />
+          Products
+        </Tab>
+        <Tab>
+          <Settings />
+          Other
+        </Tab>
       </TabsList>
 
       <TabPanel value={0}>
@@ -80,6 +90,10 @@ const Tab = styled(TabUnstyled)(
     &.${buttonUnstyledClasses.disabled} {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+    & .MuiSvgIcon-root {
+        margin-right: 0.5rem;
     }
   `
 );
