@@ -12,18 +12,29 @@ import { CircularProgress } from '@mui/material';
 import { Store, ShoppingCart, Settings } from '@mui/icons-material';
 import { useGetUserPurchasesQuery } from '../../shared/api/purchases';
 import UserPurchases from './UserPurchases';
+import { useGetProductsByUserQuery } from '../../shared/api/products';
+import UserProducts from './UserProducts';
 
 function UserDashboard({ userId }) {
   const { data: purchasesData, isLoading: isPurchasesLoading } =
     useGetUserPurchasesQuery(userId);
+  const { data: productsData, isLoading: isProductsLoading } =
+    useGetProductsByUserQuery(userId);
 
   const [purchases, setPurchases] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     if (!isPurchasesLoading) {
       setPurchases(purchasesData.purchases);
     }
   }, [purchasesData, isPurchasesLoading]);
+
+  useEffect(() => {
+    if (!isProductsLoading) {
+      setProducts(productsData.products);
+    }
+  }, [productsData, isProductsLoading]);
 
   return (
     <TabsUnstyled defaultValue={0}>
@@ -49,7 +60,15 @@ function UserDashboard({ userId }) {
           <UserPurchases purchases={purchases} />
         )}
       </TabPanel>
-      <TabPanel value={1}>Second content</TabPanel>
+
+      <TabPanel value={1}>
+        {isProductsLoading ? (
+          <CircularProgress />
+        ) : (
+          <UserProducts products={products} userId={userId} />
+        )}
+      </TabPanel>
+
       <TabPanel value={2}>Third content</TabPanel>
     </TabsUnstyled>
   );
