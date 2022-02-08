@@ -217,21 +217,23 @@ const AuthContainer = styled(Container)(({ theme }) => ({
   },
 }));
 
-const AuthForm = styled(Container)(({ theme }) => ({
+const AuthForm = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+  alignItems: 'center',
   '& input': {
     marginBottom: '1.5rem',
   },
   '& label': {
-    margin: '0 0 5px 2.3rem',
+    display: 'inline-block',
+    width: '386px',
+    marginBottom: '5px',
     fontWeight: 700,
   },
   '& label .Mui-error': {},
   '& .MuiButton-root': {
     margin: '2rem auto',
-    borderRadius: '8px',
-    width: '385px',
+    width: '386px',
     padding: '0.5rem 0',
   },
 }));
@@ -239,8 +241,8 @@ const AuthForm = styled(Container)(({ theme }) => ({
 const AgreementContainer = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'flex-start',
-  padding: '0 2.3rem',
   marginBottom: '1.5rem',
+  width: '386px',
   '& .MuiTypography-root': {
     fontSize: '14px',
     paddingTop: '0.5rem',
