@@ -72,10 +72,12 @@ function AccountMenu() {
         <Divider />
         <MenuItem>
           <Link to={ROUTES.PROFILE}>
-            <ListItemIcon>
-              <Person fontSize="small" />
-            </ListItemIcon>
-            Account
+            <Box display="flex" alignItems="center">
+              <ListItemIcon>
+                <Person fontSize="small" />
+              </ListItemIcon>
+              Account
+            </Box>
           </Link>
         </MenuItem>
         <MenuItem sx={{ color: 'error.main' }} onClick={handleLogout}>
@@ -129,8 +131,8 @@ const DropdownContainer = styled(Menu)(({ theme }) => ({
     },
     '& a': {
       textDecoration: 'none',
-      display: 'flex',
-      alignItems: 'center',
+      display: 'inline-block',
+      width: '100%',
       color: theme.palette.common.black,
     },
   },
