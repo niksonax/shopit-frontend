@@ -13,9 +13,9 @@ function UserPurchases({ purchases }) {
     );
 
     setPurchasesList(
-      purchasesSorted.map((purchase) => {
-        return <Purchase key={purchase.id} {...purchase} />;
-      })
+      purchasesSorted.map((purchase) => (
+        <Purchase key={purchase.id} {...purchase} />
+      ))
     );
   }, [purchases]);
 
