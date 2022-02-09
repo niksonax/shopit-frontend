@@ -3,4 +3,5 @@ export const ROUTES = {
   AUTH: '/auth',
   CATALOG: '/catalog',
   ABOUT: '/about',
+  PROFILE: '/profile',
 };

@@ -8,6 +8,9 @@ export const purchasesApi = createApi({
     getPurchases: builder.query({
       query: () => 'purchases',
     }),
+    getUserPurchases: builder.query({
+      query: (userId) => `purchases/user/${userId}`,
+    }),
     createPurchase: builder.mutation({
       query: (purchaseData) => ({
         url: 'purchases',
@@ -18,4 +21,8 @@ export const purchasesApi = createApi({
   }),
 });
 
-export const { useGetPurchasesQuery, useCreatePurchaseMutation } = purchasesApi;
+export const {
+  useGetPurchasesQuery,
+  useGetUserPurchasesQuery,
+  useCreatePurchaseMutation,
+} = purchasesApi;
