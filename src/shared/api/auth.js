@@ -53,8 +53,8 @@ export const authApi = createApi({
       }),
       async onQueryStarted(_, { dispatch }) {
         try {
-          window.localStorage.setItem('accessToken', null);
-          window.localStorage.setItem('refreshToken', null);
+          window.localStorage.removeItem('accessToken');
+          window.localStorage.removeItem('refreshToken');
 
           dispatch(setCredentials({ id: null, name: null, email: null }));
           dispatch(setAuthenticated({ isAuthenticated: false }));
