@@ -16,6 +16,7 @@ import {
   useCreateProductMutation,
   useUpdateProductMutation,
 } from '../../shared/api/products';
+import { useLazyGetProductsByUserQuery } from '../../shared/api/products';
 
 function ProductModal({ state, open, handleClose, userId, product }) {
   const [productData, setProductData] = useState({
@@ -26,6 +27,7 @@ function ProductModal({ state, open, handleClose, userId, product }) {
 
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
+  const [getProductsByUser] = useLazyGetProductsByUserQuery();
 
   const handleInputChange = (e) => {
     const field = e.target.id;
@@ -55,6 +57,7 @@ function ProductModal({ state, open, handleClose, userId, product }) {
       });
     }
 
+    getProductsByUser(userId);
     handleClose();
   };
 
