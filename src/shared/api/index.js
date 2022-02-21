@@ -41,8 +41,8 @@ async function baseQueryWithReauth(args, api, extraOptions) {
       // retry the initial query
       result = await baseQuery(args, api, extraOptions);
     } else {
-      window.localStorage.setItem('accessToken', null);
-      window.localStorage.setItem('refreshToken', null);
+      window.localStorage.remove('accessToken');
+      window.localStorage.remove('refreshToken');
     }
   }
   return result;

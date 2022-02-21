@@ -23,6 +23,6 @@ export const purchasesApi = createApi({
 
 export const {
   useGetPurchasesQuery,
-  useGetUserPurchasesQuery,
+  useLazyGetUserPurchasesQuery,
   useCreatePurchaseMutation,
 } = purchasesApi;

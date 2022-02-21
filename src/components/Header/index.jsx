@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { styled } from '@mui/system';
 import { Box, AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { useAuth } from '../../shared/hooks';
+import { useLoginByTokenMutation } from '../../shared/api/auth';
 import { AccountMenu } from '..';
 import { ROUTES } from '../../routing/routes';
 import { STATES } from '../../pages/Auth/constants';
 
 function Header() {
   const isAuthenticated = useAuth();
+
+  const [loginByToken] = useLoginByTokenMutation();
+
+  const accessToken = window.localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      if (accessToken) {
+        loginByToken();
+      }
+    }
+  }, [accessToken, isAuthenticated, loginByToken]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

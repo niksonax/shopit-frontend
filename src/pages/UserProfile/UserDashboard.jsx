@@ -10,31 +10,41 @@ import {
 } from '@mui/base';
 import { CircularProgress } from '@mui/material';
 import { Store, ShoppingCart, Settings } from '@mui/icons-material';
-import { useGetUserPurchasesQuery } from '../../shared/api/purchases';
+import { useLazyGetUserPurchasesQuery } from '../../shared/api/purchases';
 import UserPurchases from './UserPurchases';
-import { useGetProductsByUserQuery } from '../../shared/api/products';
+import { useLazyGetProductsByUserQuery } from '../../shared/api/products';
 import UserProducts from './UserProducts';
 
 function UserDashboard({ userId }) {
-  const { data: purchasesData, isLoading: isPurchasesLoading } =
-    useGetUserPurchasesQuery(userId);
-  const { data: productsData, isLoading: isProductsLoading } =
-    useGetProductsByUserQuery(userId);
+  const [
+    getUserPurchases,
+    { data: purchasesData, isSuccess: isPurchasesSuccess },
+  ] = useLazyGetUserPurchasesQuery();
+
+  const [
+    getProductsByUser,
+    { data: productsData, isSuccess: isProductsSuccess },
+  ] = useLazyGetProductsByUserQuery();
 
   const [purchases, setPurchases] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    if (!isPurchasesLoading) {
-      setPurchases(purchasesData.purchases);
-    }
-  }, [purchasesData, isPurchasesLoading]);
+    getUserPurchases(userId);
+    getProductsByUser(userId);
+  }, [getUserPurchases, getProductsByUser, userId]);
 
   useEffect(() => {
-    if (!isProductsLoading) {
+    if (isPurchasesSuccess) {
+      setPurchases(purchasesData.purchases);
+    }
+  }, [purchasesData, isPurchasesSuccess]);
+
+  useEffect(() => {
+    if (isProductsSuccess) {
       setProducts(productsData.products);
     }
-  }, [productsData, isProductsLoading]);
+  }, [productsData, isProductsSuccess]);
 
   return (
     <TabsUnstyled defaultValue={0}>
@@ -54,7 +64,7 @@ function UserDashboard({ userId }) {
       </TabsList>
 
       <TabPanel value={0}>
-        {isPurchasesLoading ? (
+        {!isPurchasesSuccess ? (
           <CircularProgress />
         ) : (
           <UserPurchases purchases={purchases} />
@@ -62,7 +72,7 @@ function UserDashboard({ userId }) {
       </TabPanel>
 
       <TabPanel value={1}>
-        {isProductsLoading ? (
+        {!isProductsSuccess ? (
           <CircularProgress />
         ) : (
           <UserProducts products={products} userId={userId} />
